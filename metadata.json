@@ -1,0 +1,6 @@
+{
+  "name": "BU Job Fair Registration System",
+  "description": "Foundational architecture, layout, routing, localized language system, and Firebase service structure for the BU Job Fair Registration System.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bu-blue: #003DA5;
+  --color-bu-slate: #F4F6F8;
+  --color-bu-bright: #0077FF;
+  --color-bu-success: #00A86B;
+  --color-bu-warning: #FFB000;
+  --color-bu-danger: #E53935;
+  --font-sans: "Inter", "Sarabun", system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bu-slate);
+    color: #1a202c;
+    font-family: var(--font-sans);
+  }
+
+  /* Rich text content renderer default style rules */
+  .rich-content-rendered ul {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .rich-content-rendered ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .rich-content-rendered blockquote {
+    border-left: 4px solid #003DA5 !important;
+    padding-left: 1rem !important;
+    color: #4a5568 !important;
+    font-style: italic !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .rich-content-rendered table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  .rich-content-rendered th {
+    border: 1px solid #cbd5e0 !important;
+    background-color: #f7fafc !important;
+    padding: 0.5rem !important;
+    font-weight: bold !important;
+  }
+  .rich-content-rendered td {
+    border: 1px solid #cbd5e0 !important;
+    padding: 0.5rem !important;
+  }
+  .rich-content-rendered h1 {
+    font-size: 1.875rem !important;
+    font-weight: 800 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .rich-content-rendered h2 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .rich-content-rendered h3 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .rich-content-rendered a {
+    color: #0077FF !important;
+    text-decoration: underline !important;
+  }
+  .rich-content-rendered img {
+    max-width: 100% !important;
+    border-radius: 0.5rem !important;
+    margin: 1rem 0 !important;
+  }
+
+  /* Editor workspace placeholder styles */
+  .rich-text-editor-workspace ul {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+  }
+  .rich-text-editor-workspace ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+  }
+  .rich-text-editor-workspace blockquote {
+    border-left: 4px solid #003DA5 !important;
+    padding-left: 1rem !important;
+    color: #4a5568 !important;
+    font-style: italic !important;
+  }
+  .rich-text-editor-workspace table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+  .rich-text-editor-workspace th {
+    border: 1px solid #cbd5e0 !important;
+    background-color: #f7fafc !important;
+    padding: 0.5rem !important;
+    font-weight: bold !important;
+  }
+  .rich-text-editor-workspace td {
+    border: 1px solid #cbd5e0 !important;
+    padding: 0.5rem !important;
+  }
+  .rich-text-editor-workspace h1 {
+    font-size: 1.875rem !important;
+    font-weight: 800 !important;
+  }
+  .rich-text-editor-workspace h2 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+  }
+  .rich-text-editor-workspace h3 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+  }
+  .rich-text-editor-workspace a {
+    color: #0077FF !important;
+    text-decoration: underline !important;
+  }
+}

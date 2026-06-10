@@ -1,0 +1,137 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net: Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Core helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "workinteg@bu.ac.th" || 
+        (exists(/databases/$(database)/documents/admins/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == "superAdmin")
+      );
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "workinteg@bu.ac.th" ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // 1. Announcements rules
+    match /announcements/{announcementId} {
+      allow read: if true; // Public can read announcements
+      allow write: if isAdmin(); // Admin/Super Admin can write
+    }
+
+    // 2. Settings rules
+    match /settings/{settingId} {
+      allow read: if true; // Public can read settings config
+      allow write: if isSuperAdmin(); // Only Super Admin can write/update global config
+    }
+
+    // 3. Business Categories rules
+    match /businessCategories/{categoryId} {
+      allow read: if true; // Public can read categories for form dropdown
+      allow write: if isSuperAdmin(); // Only Super Admin can manage categories
+    }
+
+    // 4. Event Dates rules
+    match /eventDates/{dateId} {
+      allow read: if true; // Public can read event dates
+      allow write: if isSuperAdmin(); // Only Super Admin can manage event dates
+    }
+
+    // 5. Booths rules
+    match /booths/{boothId} {
+      allow read: if true; // Public can view booth statuses
+      allow write: if isAdmin(); // Authorized Admin/Super Admin can update booth labels/allocations
+    }
+
+    // 6. Company Master rules
+    match /companyMaster/{companyId} {
+      allow read: if true; // Public can view active company master roster
+      allow write: if isSuperAdmin(); // Super Admin manages master list
+    }
+
+    // 7. Registrations rules
+    match /registrations/{registrationId} {
+      allow get: if true; // Public can query status of their own registration
+      allow list: if isAdmin(); // Admins can view complete registration lists
+      allow create: if 
+        request.resource.data.status == "pending" &&
+        request.resource.data.companyNameTH is string &&
+        request.resource.data.companyNameEN is string; // Public registration submission
+      allow update, delete: if isAdmin(); // Active administration of applicants
+    }
+
+    // 8. Email Templates rules
+    match /emailTemplates/{templateId} {
+      allow read: if isAdmin();
+      allow write: if isSuperAdmin(); // Only Super Admin can manage layouts
+    }
+
+    // 9. Email Queue rules
+    match /emailQueue/{queueId} {
+      allow read: if isAdmin();
+      allow write: if isSuperAdmin();
+    }
+
+    // 10. Email Logs rules
+    match /emailLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if isSuperAdmin();
+    }
+
+    // 11. System Counters rules (atomic sequences)
+    match /systemCounters/{counterId} {
+      allow read: if true;
+      allow write: if true; // Public can increment the registrations counter
+    }
+
+    // 12. Admins rules
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSuperAdmin() || (isSignedIn() && (resource.data.uid == request.auth.uid || resource.data.email == request.auth.token.email));
+      allow delete: if isSuperAdmin();
+    }
+
+    // 13. Audit Logs rules
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn(); // Log submissions are allowed for authenticated events
+      allow update, delete: if false; // Audit logs are immutable
+    }
+
+    // ==========================================
+    // BACKWARD COMPATIBILITY ENDPOINTS (LEGACY)
+    // ==========================================
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /companies/{companyId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /email_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+    match /email_templates/{templateId} {
+      allow read, write: if isAdmin();
+    }
+    match /audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

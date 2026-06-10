@@ -1,0 +1,175 @@
+{
+  "entities": {
+    "Category": {
+      "title": "Category",
+      "description": "Exhibition industrial category descriptors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nameTH": { "type": "string" },
+        "nameEN": { "type": "string" },
+        "descriptionTH": { "type": "string" },
+        "descriptionEN": { "type": "string" }
+      },
+      "required": ["id", "nameTH", "nameEN"]
+    },
+    "Booth": {
+      "title": "Booth",
+      "description": "Floor plan exhibition booth layout metrics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "number": { "type": "string" },
+        "companyId": { "type": "string" },
+        "status": { "type": "string", "enum": ["available", "reserved", "disabled"] }
+      },
+      "required": ["id", "label", "number", "status"]
+    },
+    "Company": {
+      "title": "Company",
+      "description": "Approved participating corporate vendor",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nameTH": { "type": "string" },
+        "nameEN": { "type": "string" },
+        "website": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "registeredAt": { "type": "string" },
+        "boothId": { "type": "string" }
+      },
+      "required": ["id", "nameTH", "nameEN", "contactEmail", "contactPhone", "categoryId", "registeredAt"]
+    },
+    "Registration": {
+      "title": "Registration",
+      "description": "Corporate applicant request registrations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "companyNameTH": { "type": "string" },
+        "companyNameEN": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "contactPerson": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "registeredAt": { "type": "string" },
+        "boothId": { "type": "string" }
+      },
+      "required": ["id", "companyNameTH", "companyNameEN", "categoryId", "contactPerson", "email", "phone", "status", "registeredAt"]
+    },
+    "EmailLog": {
+      "title": "EmailLog",
+      "description": "History logs of dispatch notifications",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "recipient": { "type": "string" },
+        "subject": { "type": "string" },
+        "status": { "type": "string", "enum": ["sent", "pending", "failed"] },
+        "sentAt": { "type": "string" },
+        "templateId": { "type": "string" }
+      },
+      "required": ["id", "recipient", "subject", "status", "sentAt"]
+    },
+    "EmailTemplate": {
+      "title": "EmailTemplate",
+      "description": "Dual language email templates layouts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "subjectTH": { "type": "string" },
+        "subjectEN": { "type": "string" },
+        "bodyTH": { "type": "string" },
+        "bodyEN": { "type": "string" },
+        "type": { "type": "string" }
+      },
+      "required": ["id", "name", "subjectTH", "subjectEN", "bodyTH", "bodyEN"]
+    },
+    "SystemSettings": {
+      "title": "SystemSettings",
+      "description": "Global operational preference settings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "registrationOpen": { "type": "boolean" },
+        "maxCompanies": { "type": "number" },
+        "eventYear": { "type": "string" },
+        "announcementTH": { "type": "string" },
+        "announcementEN": { "type": "string" }
+      },
+      "required": ["id", "registrationOpen", "maxCompanies", "eventYear"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Trace auditing trail record of admin operations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user": { "type": "string" },
+        "action": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "details": { "type": "string" }
+      },
+      "required": ["id", "user", "action", "timestamp", "details"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "System administrator user role mapping configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["superAdmin", "admin"] },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "email", "role", "active"]
+    }
+  },
+  "firestore": {
+    "categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Collection of industrial categorization options"
+    },
+    "booths/{boothId}": {
+      "schema": "Booth",
+      "description": "Collection of available event hall booth coordinate map entries"
+    },
+    "companies/{companyId}": {
+      "schema": "Company",
+      "description": "Collection of authorized participating partners"
+    },
+    "registrations/{registrationId}": {
+      "schema": "Registration",
+      "description": "Collection of corporate applicant files"
+    },
+    "email_logs/{logId}": {
+      "schema": "EmailLog",
+      "description": "Collection of communication logs"
+    },
+    "email_templates/{templateId}": {
+      "schema": "EmailTemplate",
+      "description": "Collection of customizable dual locale layouts"
+    },
+    "settings/{settingId}": {
+      "schema": "SystemSettings",
+      "description": "Collection hosting key admin preference switches"
+    },
+    "audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Collection of secure operator trace events"
+    },
+    "admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Collection of administrators authorized to log in"
+    }
+  }
+}
